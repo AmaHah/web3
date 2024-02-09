@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="9fd38906-e8a2-4d73-b445-c37c6b164455" name="wildfly30" url="http://localhost:32791">
+        <fileTransfer rootFolder="/home/studs/s367841/wildfly-30.0.0.Final/docs" accessType="SFTP" host="helios.cs.ifmo.ru" port="2222" sshConfigId="6ce364eb-5f20-4c7c-aa8b-4e3316cb061d" sshConfig="s367841@helios.cs.ifmo.ru:2222 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

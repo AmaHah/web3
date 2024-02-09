@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+
+<html lang="ru"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <h:outputScript library="scripts" name="dots/CanvasPrinter.js"/>
+        <h:outputScript library="scripts" name="dots/onetime.js"/>
+
+        <!-- Библиотека компиляции less -->
+        <link rel="stylesheet/less" type="text/css" href="resources/styles/dots/styles.less" />
+        <script src="https://cdn.jsdelivr.net/npm/less" ></script>
+
+        <!-- Библиотека SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <title>Ахунов Амир | Веб программиирование</title>
+    </h:head>
+    <h:body>
+        <header>Ахунов Амир. P3215 Вариант 18967</header>
+        <div id="main-container">
+            <div id="form-container">
+                <h:form>
+                    <div class="input-container" id="X-input-container">
+                        <p:outputLabel styleClass="form-label" for="@next" value="Выберите X:"/>
+                        <p:selectBooleanCheckbox value="false" itemLabel="-3" class="X-checkbox">
+                            <f:ajax render="x" listener="#{pointHandler.point.setX(-3)}"/>
+                        </p:selectBooleanCheckbox>
+                        <p:selectBooleanCheckbox value="false" itemLabel="-2" class="X-checkbox">
+                            <f:ajax render="x" listener="#{pointHandler.point.setX(-2)}"/>
+                        </p:selectBooleanCheckbox>
+                        <p:selectBooleanCheckbox value="false" itemLabel="-1" class="X-checkbox">
+                            <f:ajax render="x" listener="#{pointHandler.point.setX(-1)}"/>
+                        </p:selectBooleanCheckbox>
+                        <p:selectBooleanCheckbox value="true" itemLabel="0" class="X-checkbox">
+                            <f:ajax render="x" listener="#{pointHandler.point.setX(0)}"/>
+                        </p:selectBooleanCheckbox>
+                        <p:selectBooleanCheckbox value="false" itemLabel="1" class="X-checkbox">
+                            <f:ajax render="x" listener="#{pointHandler.point.setX(1)}"/>
+                        </p:selectBooleanCheckbox>
+                        <p:selectBooleanCheckbox value="false" itemLabel="2" class="X-checkbox">
+                            <f:ajax render="x" listener="#{pointHandler.point.setX(2)}"/>
+                        </p:selectBooleanCheckbox>
+                        <p:selectBooleanCheckbox value="false" itemLabel="3" class="X-checkbox">
+                            <f:ajax render="x" listener="#{pointHandler.point.setX(3)}"/>
+                        </p:selectBooleanCheckbox>
+                    </div>
+                    <div class="input-container" id="Y-input-container">
+                        <p:outputLabel  styleClass="form-label" for="@next" value="Выберите Y:"/>
+                        <h:inputText id="Y-input"
+                                     name="Y-input"
+                                     type="text"
+                                     value="#{pointHandler.point.y}"
+                                     styleClass="Y-input input-area"
+                                     required="false"
+                                     maxlength="6"
+                                     validatorMessage="Не входит в [-5..3]"
+                                     converterMessage="Введите число">
+                            <f:validateDoubleRange minimum="-5" maximum="3"/>
+                            <f:ajax render="Y-value-message"/>
+                        </h:inputText>
+                        <h:message for="Y-input" id="Y-value-message"/>
+                    </div>
+                        <div class="input-container" id="R-input-container">
+                            <p:outputLabel styleClass="form-label" for="@next" value="Выберите R:"/>
+                            <p:selectBooleanCheckbox value="true" itemLabel="1" class="R-checkbox" >
+                                <f:ajax onevent="canvasPrinter.redrawAll(1)" render="r" listener="#{pointHandler.point.setR(1)}"/>
+                            </p:selectBooleanCheckbox>
+                            <p:selectBooleanCheckbox value="false" itemLabel="1.5" class="R-checkbox">
+                                <f:ajax onevent="canvasPrinter.redrawAll(1.5)" render="r" listener="#{pointHandler.point.setR(1.5)}"/>
+                            </p:selectBooleanCheckbox>
+                            <p:selectBooleanCheckbox value="false" itemLabel="2" class="R-checkbox">
+                                <f:ajax onevent="canvasPrinter.redrawAll(2)" render="r" listener="#{pointHandler.point.setR(2)}"/>
+                            </p:selectBooleanCheckbox>
+                            <p:selectBooleanCheckbox value="false" itemLabel="2.5" class="R-checkbox">
+                                <f:ajax onevent="canvasPrinter.redrawAll(2.5)" render="r" listener="#{pointHandler.point.setR(2.5)}"/>
+                            </p:selectBooleanCheckbox>
+                            <p:selectBooleanCheckbox value="false" itemLabel="3" class="R-checkbox">
+                                <f:ajax onevent="canvasPrinter.redrawAll(3)" render="r" listener="#{pointHandler.point.setR(3)}"/>
+                            </p:selectBooleanCheckbox>
+                        </div>
+                    <div class="input-container" id="buttons-container">
+                        <h:button value="Назад" styleClass="surfing-button main-button" outcome="go-to-index" id="go_to_index_button"/>
+                        <h:commandButton type="submit"
+                                         id="check"
+                                         styleClass="main-button"
+                                         value="Проверить"
+                                         action="#{pointHandler.add()}"/>
+                    </div>
+                </h:form>
+            </div>
+            <div id="graph-container">
+                <canvas id="graph" width="300" height="300"/>
+            </div>
+            <div class="table-container">
+                <h:dataTable id="table" styleClass="main-table" value="#{pointHandler.points}" var="point" >
+                    <p:remoteCommand name=""/>
+                    <h:column>
+                        <f:facet name="header">X</f:facet>
+                        <h:outputText id="x" value="#{point.x}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Y</f:facet>
+                        <h:outputText id="y" value="#{point.y}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">R</f:facet>
+                        <h:outputText id="r" value="#{point.r}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Результат</f:facet>
+                        <h:outputText styleClass="#{point.statusHTMLClass}" id="status" value="#{point.statusString}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Текущее время</f:facet>
+                        <h:outputText id="time" value="#{point.time}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Время работы (мкс)</f:facet>
+                        <h:outputText id="script-time" value="#{point.scriptTime}"/>
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </div>
+        <h:panelGroup id="graphPanel">
+            <h:outputScript>
+                canvasPrinter.redrawAll(canvasPrinter.lastClickedR);
+            </h:outputScript>/
+        </h:panelGroup>
+
+        <p:remoteCommand name="addAttempt" action="#{pointHandler.addFromJS()}" update="table" process="@this"/>
+        <p:remoteCommand name="updateGraph" update="graphPanel" process="@this"/>
+        <p:remoteCommand name="checkUpdate" id="checkUpdate" action="#{pointHandler.loadPointsFromDb()}" update="@(#checkUpdate)" process="@this"/>
+    </h:body>
+</html>
